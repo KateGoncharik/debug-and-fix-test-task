@@ -26,7 +26,7 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
       visible: !prevState.visible
     }));
   }
-
+  document.body.style = visible ? 'overflow: hidden;' : 'overflow: auto;';
   return (
     <PopupContainer visible={visible}>
       <StyledPopup>
