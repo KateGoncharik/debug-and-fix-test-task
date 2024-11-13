@@ -7,14 +7,14 @@ const API_EPISODES_URL = 'https://rickandmortyapi.com/api/episode';
 
 export function PopupEpisodes({ episodes }) {
   const [series, setSeries] = useState([]);
-  const [isFetching, setIsFetching] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     if (!episodes?.length) {
       return;
     }
 
-    setIsFetching(true);
+    setIsFetching(false);
 
     const episodesIds = episodes.map((ep) => ep.match(/\d+$/)[0]);
 
