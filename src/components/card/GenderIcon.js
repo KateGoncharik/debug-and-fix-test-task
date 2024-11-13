@@ -3,12 +3,15 @@ import { ReactComponent as Female } from '../../assets/genders/female.svg';
 import { ReactComponent as Genderless } from '../../assets/genders/genderless.svg';
 
 export function GenderIcon({ gender }) {
-  switch (gender) {
+  if (!gender) {
+    return;
+  }
+  switch (gender.toLowerCase()) {
     case 'male':
       return <Male width={20} height={20} fill="#33b3c8" title="Male" />;
     case 'female':
       return <Female width={24} height={24} fill="pink" title="Female" />;
-    case 'genderless':
+    case 'unknown':
       return (
         <Genderless width={24} height={24} fill="#999" title="Genderless" />
       );
