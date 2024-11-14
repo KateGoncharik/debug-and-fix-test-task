@@ -3,6 +3,15 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 const API_URL = 'https://rickandmortyapi.com/api/character/';
 
+const buildQueryString = (params) => {
+  const result = [];
+  for (const [key, value] of params) {
+    const query = `${key}=${value}`;
+    result.push(query);
+  }
+  return `?${result.join('&')}`;
+};
+
 export function DataProvider({ children }) {
   const [activePage, setActivePage] = useState(0);
   const [characters, setCharacters] = useState([]);
@@ -28,9 +37,15 @@ export function DataProvider({ children }) {
         console.error(e);
       });
   };
-
   useEffect(() => {
-    fetchData(apiURL);
+    const searchParams = new URLSearchParams(document.location.search);
+    const allSearchParams = searchParams.entries();
+    if (searchParams.size > 0) {
+      const filtersQueryString = buildQueryString(allSearchParams);
+      fetchData(apiURL + filtersQueryString);
+    } else {
+      fetchData(apiURL);
+    }
   }, [apiURL]);
 
   const dataValue = useMemo(
