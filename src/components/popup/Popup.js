@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { PopupEpisodes } from './PopupEpisodes';
 import { PopupHeader } from './PopupHeader';
 import { PopupInfo } from './PopupInfo';
+import { useEffect } from 'react';
+import { useCallback } from 'react';
 
 export function Popup({ settings: { visible, content = {} }, setSettings }) {
   const {
@@ -17,16 +19,21 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
   } = content;
 
   function togglePopup(e) {
-    if (e.currentTarget !== e.target) {
-      return;
-    }
-
     setSettings((prevState) => ({
       ...prevState,
       visible: !prevState.visible
     }));
   }
   document.body.style = visible ? 'overflow: hidden;' : 'overflow: auto;';
+  const cachedTogglePopup = useCallback(togglePopup, [setSettings]);
+
+  useEffect(() => {
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('dnLlJK')) {
+        cachedTogglePopup(e);
+      }
+    });
+  }, [cachedTogglePopup]);
   return (
     <PopupContainer visible={visible}>
       <StyledPopup>
