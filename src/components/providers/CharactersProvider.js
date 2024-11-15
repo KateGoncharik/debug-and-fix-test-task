@@ -11,33 +11,32 @@ import {
 const API_URL = 'https://rickandmortyapi.com/api/character/';
 
 export function CharactersProvider({ children }) {
-  // TODO can we set it as 1?
-  const [activePage, setActivePage] = useState(0);
+  const initSearchParams = new URLSearchParams(document.location.search);
+
+  const getInitSearchParamValue = (searchParamName) => {
+    return initSearchParams.get(searchParamName) ?? '';
+  };
+  const initPage = getInitSearchParamValue('page');
+  const firstPageIndex = 0;
+  const [activePage, setActivePage] = useState(
+    initPage === '' ? firstPageIndex : initPage
+  );
   const [characters, setCharacters] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const [isError, setIsError] = useState(false);
   const [info, setInfo] = useState({});
   const [apiURL, setApiURL] = useState(API_URL);
 
-  // we need to handle both typed in url filters and passed from input !
-  // we need to reset page on new filters +
-
-  // inputs values are applied to url +
-
-  // we store search params in provider +
-  // we pass params values and setter for values to filters component +
-  // in filters component we pass input values to state +
-
   const [filters, setFilters] = useState({
-    name: '',
-    status: '',
-    species: '',
-    type: '',
-    gender: ''
+    name: getInitSearchParamValue('name'),
+    status: getInitSearchParamValue('status'),
+    species: getInitSearchParamValue('species'),
+    type: getInitSearchParamValue('type'),
+    gender: getInitSearchParamValue('gender')
   });
 
   const resetActivePage = () => {
-    setActivePage(0);
+    setActivePage(firstPageIndex);
   };
 
   const updateUrl = useCallback(
