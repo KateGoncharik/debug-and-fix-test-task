@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import { useCharacters } from '../providers';
 
 export function Filters() {
-  const { filters, setFilters } = useCharacters();
+  const { filters, setFilters, resetActivePage } = useCharacters();
 
   const [nameValue, setNameValue] = useState(filters.name);
   const [statusValue, setStatusValue] = useState(filters.status);
+  const [speciesValue, setSpeciesValue] = useState(filters.species);
   const [typeValue, setTypeValue] = useState(filters.type);
   const [genderValue, setGenderValue] = useState(filters.gender);
 
@@ -14,53 +15,70 @@ export function Filters() {
     setFilters({
       name: nameValue,
       status: statusValue,
+      species: speciesValue,
       type: typeValue,
       gender: genderValue
     });
+    resetActivePage();
   };
 
   return (
     <FiltersContainer>
       <FilterGroupsWrapper>
         <FiltersSmallContainer>
-          <StyledLabel htmlFor="name">Name</StyledLabel>
+          <StyledLabel htmlFor="name-filter-input">Name</StyledLabel>
           <StyledInput
             value={nameValue}
             onChange={(e) => {
               setNameValue(e.target.value);
             }}
+            id="name-filter-input"
             type="text"
             name="name"
             placeholder="Rick"
           />
-          <StyledLabel htmlFor="name">Status</StyledLabel>
+          <StyledLabel htmlFor="status-filter-input">Status</StyledLabel>
           <StyledInput
             value={statusValue}
             onChange={(e) => {
               setStatusValue(e.target.value);
             }}
+            id="status-filter-input"
             type="text"
             name="status"
             placeholder="Alive"
           />
         </FiltersSmallContainer>
         <FiltersSmallContainer>
-          <StyledLabel htmlFor="name">Type</StyledLabel>
+          <StyledLabel htmlFor="species-filter-input">Species</StyledLabel>
+          <StyledInput
+            value={speciesValue}
+            onChange={(e) => {
+              setSpeciesValue(e.target.value);
+            }}
+            id="species-filter-input"
+            type="text"
+            name="type"
+            placeholder="Human"
+          />
+          <StyledLabel htmlFor="type-filter-input">Type</StyledLabel>
           <StyledInput
             value={typeValue}
             onChange={(e) => {
               setTypeValue(e.target.value);
             }}
+            id="type-filter-input"
             type="text"
             name="type"
-            placeholder="Human"
+            placeholder="Superhuman"
           />
-          <StyledLabel htmlFor="name">Gender</StyledLabel>
+          <StyledLabel htmlFor="gender-filter-input">Gender</StyledLabel>
           <StyledInput
             value={genderValue}
             onChange={(e) => {
               setGenderValue(e.target.value);
             }}
+            id="gender-filter-input"
             type="text"
             name="gender"
             placeholder="Male"

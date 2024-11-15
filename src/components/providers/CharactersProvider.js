@@ -11,6 +11,7 @@ import {
 const API_URL = 'https://rickandmortyapi.com/api/character/';
 
 export function CharactersProvider({ children }) {
+  // TODO can we set it as 1?
   const [activePage, setActivePage] = useState(0);
   const [characters, setCharacters] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
@@ -19,31 +20,38 @@ export function CharactersProvider({ children }) {
   const [apiURL, setApiURL] = useState(API_URL);
 
   // we need to handle both typed in url filters and passed from input !
+  // we need to reset page on new filters +
 
-  // inputs values are applied to url
+  // inputs values are applied to url +
 
-  // we store search params in provider
-  // we pass params values and setter for values to filters component
-  // in filters component we pass input values to state
+  // we store search params in provider +
+  // we pass params values and setter for values to filters component +
+  // in filters component we pass input values to state +
 
   const [filters, setFilters] = useState({
     name: '',
     status: '',
+    species: '',
     type: '',
     gender: ''
   });
+
+  const resetActivePage = () => {
+    setActivePage(0);
+  };
 
   const updateUrl = useCallback(
     (newFilters, page = activePage) => {
       const searchParams = new URLSearchParams();
       Object.entries(newFilters).forEach(([key, value]) => {
-        if (value) searchParams.set(key, value);
+        if (value) {
+          searchParams.set(key, value);
+        }
       });
-      // if filters are new we need to reset page
+
       searchParams.set('page', page.toString());
-      // here is request url !
+
       const newUrl = `${API_URL}?${searchParams.toString()}`;
-      // here is app url !
       window.history.pushState({}, '', `?${searchParams.toString()}`);
 
       setApiURL(newUrl);
@@ -88,6 +96,7 @@ export function CharactersProvider({ children }) {
       isError,
       filters,
       setFilters,
+      resetActivePage,
       info
     }),
     [
