@@ -1,29 +1,22 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useCharacters } from '../providers';
 
 export function Filters() {
-  const searchParams = new URLSearchParams(document.location.search);
-  const [nameValue, setNameValue] = useState(searchParams.get('name') ?? '');
-  const [statusValue, setStatusValue] = useState(
-    searchParams.get('status') ?? ''
-  );
-  const [typeValue, setTypeValue] = useState(searchParams.get('type') ?? '');
-  const [genderValue, setGenderValue] = useState(
-    searchParams.get('gender') ?? ''
-  );
-  // TODO get state values and pass them to url
-  // should we persist them?
+  const { filters, setFilters } = useCharacters();
 
-  const updateUrl = () => {
-    const newSearchParams = new URLSearchParams();
+  const [nameValue, setNameValue] = useState(filters.name);
+  const [statusValue, setStatusValue] = useState(filters.status);
+  const [typeValue, setTypeValue] = useState(filters.type);
+  const [genderValue, setGenderValue] = useState(filters.gender);
 
-    if (nameValue) newSearchParams.set('name', nameValue);
-    if (statusValue) newSearchParams.set('status', statusValue);
-    if (typeValue) newSearchParams.set('type', typeValue);
-    if (genderValue) newSearchParams.set('gender', genderValue);
-
-    const newUrl = '?' + newSearchParams.toString();
-    window.history.pushState({ path: newUrl }, '', newUrl);
+  const handleFiltersApply = () => {
+    setFilters({
+      name: nameValue,
+      status: statusValue,
+      type: typeValue,
+      gender: genderValue
+    });
   };
 
   return (
@@ -75,7 +68,7 @@ export function Filters() {
         </FiltersSmallContainer>
       </FilterGroupsWrapper>
 
-      <ApplyFiltersButton type="button" onClick={updateUrl}>
+      <ApplyFiltersButton type="button" onClick={handleFiltersApply}>
         Apply
       </ApplyFiltersButton>
     </FiltersContainer>

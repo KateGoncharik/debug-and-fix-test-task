@@ -1,16 +1,14 @@
 import axios from 'axios';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 
 const API_URL = 'https://rickandmortyapi.com/api/character/';
-
-const buildQueryString = (params) => {
-  const result = [];
-  for (const [key, value] of params) {
-    const query = `${key}=${value}`;
-    result.push(query);
-  }
-  return `?${result.join('&')}`;
-};
 
 export function CharactersProvider({ children }) {
   const [activePage, setActivePage] = useState(0);
@@ -20,12 +18,48 @@ export function CharactersProvider({ children }) {
   const [info, setInfo] = useState({});
   const [apiURL, setApiURL] = useState(API_URL);
 
-  const fetchData = async (url) => {
+  // we need to handle both typed in url filters and passed from input !
+
+  // inputs values are applied to url
+
+  // we store search params in provider
+  // we pass params values and setter for values to filters component
+  // in filters component we pass input values to state
+
+  const [filters, setFilters] = useState({
+    name: '',
+    status: '',
+    type: '',
+    gender: ''
+  });
+
+  const updateUrl = useCallback(
+    (newFilters, page = activePage) => {
+      const searchParams = new URLSearchParams();
+      Object.entries(newFilters).forEach(([key, value]) => {
+        if (value) searchParams.set(key, value);
+      });
+      // if filters are new we need to reset page
+      searchParams.set('page', page.toString());
+      // here is request url !
+      const newUrl = `${API_URL}?${searchParams.toString()}`;
+      // here is app url !
+      window.history.pushState({}, '', `?${searchParams.toString()}`);
+
+      setApiURL(newUrl);
+    },
+    [activePage]
+  );
+
+  const fetchData = async (filters, page) => {
     setIsFetching(true);
     setIsError(false);
 
+    const searchParams = new URLSearchParams(filters);
+    searchParams.set('page', page.toString());
+
     axios
-      .get(url)
+      .get(`${API_URL}?${searchParams.toString()}`)
       .then(({ data }) => {
         setIsFetching(false);
         setCharacters(data.results);
@@ -38,18 +72,10 @@ export function CharactersProvider({ children }) {
       });
   };
 
-  // TODO we cannot use popstate handler
-
   useEffect(() => {
-    const searchParams = new URLSearchParams(document.location.search);
-    const allSearchParams = searchParams.entries();
-    if (searchParams.size > 0) {
-      const filtersQueryString = buildQueryString(allSearchParams);
-      fetchData(apiURL + filtersQueryString);
-    } else {
-      fetchData(apiURL);
-    }
-  }, [apiURL]);
+    fetchData(filters, activePage);
+    updateUrl(filters, activePage);
+  }, [filters, activePage, updateUrl]);
 
   const dataValue = useMemo(
     () => ({
@@ -60,9 +86,20 @@ export function CharactersProvider({ children }) {
       characters,
       isFetching,
       isError,
+      filters,
+      setFilters,
       info
     }),
-    [activePage, apiURL, characters, isFetching, isError, info]
+    [
+      activePage,
+      apiURL,
+      characters,
+      isFetching,
+      isError,
+      info,
+      filters,
+      setFilters
+    ]
   );
 
   return (

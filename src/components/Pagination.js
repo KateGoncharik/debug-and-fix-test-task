@@ -32,11 +32,16 @@ export function Pagination() {
 
   if (pages.length <= 1) return null;
 
+  const isTherePreviousPage = pages[activePage - 1];
+  const isThereNextPage = pages[activePage + 1];
+  const isActivePageNotFirst = activePage - 1 !== 0;
+  const isActivePageNotLast = activePage + 1 !== pages.length - 1;
+
   return (
     <StyledPagination>
-      {pages[activePage - 1] && (
+      {isTherePreviousPage && (
         <>
-          {activePage - 1 !== 0 && (
+          {isActivePageNotFirst && (
             <>
               <Page onClick={() => pageClickHandler(0)}>« First</Page>
               <Ellipsis>...</Ellipsis>
@@ -51,13 +56,13 @@ export function Pagination() {
 
       <Page active>{activePage + 1}</Page>
 
-      {pages[activePage + 1] && (
+      {isThereNextPage && (
         <>
           <Page onClick={() => pageClickHandler(activePage + 1)}>
             {activePage + 2}
           </Page>
 
-          {activePage + 1 !== pages.length - 1 && (
+          {isActivePageNotLast && (
             <>
               <Ellipsis>...</Ellipsis>
               <Page onClick={() => pageClickHandler(pages.length - 1)}>
