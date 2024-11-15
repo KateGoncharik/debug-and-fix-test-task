@@ -1,10 +1,16 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useData } from './providers';
+import { useCharacters } from './providers';
 
 export function Pagination() {
   const [pages, setPages] = useState([]);
-  const { apiURL, info, activePage, setActivePage, setApiURL } = useData();
+  const {
+    apiURL,
+    info,
+    activePage,
+    setActivePage,
+    setApiURL
+  } = useCharacters();
 
   const pageClickHandler = (index) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -82,14 +88,6 @@ const Page = styled.span`
     color: #83bf46;
   }
 `;
-
-// const Container = styled.div`
-//   width: 100%;
-//   display: grid;
-//   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-//   justify-items: center;
-//   gap: 30px;
-// `;
 
 const Ellipsis = styled(Page)`
   cursor: default;

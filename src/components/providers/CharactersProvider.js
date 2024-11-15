@@ -12,7 +12,7 @@ const buildQueryString = (params) => {
   return `?${result.join('&')}`;
 };
 
-export function DataProvider({ children }) {
+export function CharactersProvider({ children }) {
   const [activePage, setActivePage] = useState(0);
   const [characters, setCharacters] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
@@ -37,6 +37,9 @@ export function DataProvider({ children }) {
         console.error(e);
       });
   };
+
+  // TODO we cannot use popstate handler
+
   useEffect(() => {
     const searchParams = new URLSearchParams(document.location.search);
     const allSearchParams = searchParams.entries();
@@ -69,4 +72,4 @@ export function DataProvider({ children }) {
 
 const DataContext = createContext({});
 
-export const useData = () => useContext(DataContext);
+export const useCharacters = () => useContext(DataContext);

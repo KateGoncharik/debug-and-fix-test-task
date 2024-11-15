@@ -1,8 +1,14 @@
 import styled from 'styled-components';
-import { Pagination, ItemsGrid, useData, Header, AppState } from './components';
+import {
+  Pagination,
+  ItemsGrid,
+  useCharacters,
+  Header,
+  AppState
+} from './components';
 
 export function App() {
-  const { isFetching, isError } = useData();
+  const { isFetching, isError } = useCharacters();
 
   return (
     <Main>

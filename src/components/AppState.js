@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { Loader, Text } from './common';
-import { useData } from './providers';
+import { useCharacters } from './providers';
 
 export function AppState() {
-  const { isFetching, isError } = useData();
+  const { isFetching, isError } = useCharacters();
 
   if (isError) {
     return (

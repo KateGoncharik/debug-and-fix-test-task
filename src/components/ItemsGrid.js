@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Popup } from './popup';
-import { useData } from './providers';
+import { useCharacters } from './providers';
 import { Card } from './card';
 
 const defaultPopupSettings = {
@@ -10,7 +10,7 @@ const defaultPopupSettings = {
 };
 
 export function ItemsGrid() {
-  const { characters } = useData();
+  const { characters } = useCharacters();
   const [popupSettings, setPopupSettings] = useState(defaultPopupSettings);
 
   function cardOnClickHandler(props) {
