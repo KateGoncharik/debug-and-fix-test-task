@@ -91,13 +91,17 @@ const StyledPopup = styled.div`
   padding: 20px 40px;
   border: 2px solid #83bf46;
   overflow: auto;
+  transition: 2s;
 
   &::-webkit-scrollbar {
     display: none;
   }
-
-  ${window.screen.width < 930 && 'width: 80%'};
-  ${window.screen.width < 600 && 'width: 95%'};
+  @media (max-width: 1000px) {
+    width: 65%;
+  }
+  @media (max-width: 768px) {
+    width: 85%;
+  }
 `;
 
 const CloseIcon = styled.div`
@@ -112,6 +116,7 @@ const CloseIcon = styled.div`
   justify-content: center;
   align-items: center;
   background: #83bf46aa;
+  transition: 2s;
 
   &:before,
   &:after {
@@ -133,6 +138,11 @@ const CloseIcon = styled.div`
     transform: rotate(45deg);
   }
 
-  ${window.screen.width < 930 && 'right: calc(10% - 10px)'};
-  ${window.screen.width < 600 && 'right: calc(3% - 10px)'};
+  @media (max-width: 1000px) {
+    right: calc(18% - 10px);
+  }
+
+  @media (max-width: 768px) {
+    right: calc(10% - 10px);
+  }
 `;
