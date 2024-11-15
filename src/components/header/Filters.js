@@ -1,24 +1,83 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 export function Filters() {
+  const searchParams = new URLSearchParams(document.location.search);
+  const [nameValue, setNameValue] = useState(searchParams.get('name') ?? '');
+  const [statusValue, setStatusValue] = useState(
+    searchParams.get('status') ?? ''
+  );
+  const [typeValue, setTypeValue] = useState(searchParams.get('type') ?? '');
+  const [genderValue, setGenderValue] = useState(
+    searchParams.get('gender') ?? ''
+  );
+  // TODO get state values and pass them to url
+  // should we persist them?
+
+  const updateUrl = () => {
+    const newSearchParams = new URLSearchParams();
+
+    if (nameValue) newSearchParams.set('name', nameValue);
+    if (statusValue) newSearchParams.set('status', statusValue);
+    if (typeValue) newSearchParams.set('type', typeValue);
+    if (genderValue) newSearchParams.set('gender', genderValue);
+
+    const newUrl = '?' + newSearchParams.toString();
+    window.history.pushState({ path: newUrl }, '', newUrl);
+  };
+
   return (
     <FiltersContainer>
       <FilterGroupsWrapper>
         <FiltersSmallContainer>
           <StyledLabel htmlFor="name">Name</StyledLabel>
-          <StyledInput type="text" name="name" placeholder="Rick" />
+          <StyledInput
+            value={nameValue}
+            onChange={(e) => {
+              setNameValue(e.target.value);
+            }}
+            type="text"
+            name="name"
+            placeholder="Rick"
+          />
           <StyledLabel htmlFor="name">Status</StyledLabel>
-          <StyledInput type="text" name="status" placeholder="Alive" />
+          <StyledInput
+            value={statusValue}
+            onChange={(e) => {
+              setStatusValue(e.target.value);
+            }}
+            type="text"
+            name="status"
+            placeholder="Alive"
+          />
         </FiltersSmallContainer>
         <FiltersSmallContainer>
           <StyledLabel htmlFor="name">Type</StyledLabel>
-          <StyledInput type="text" name="type" placeholder="Human" />
+          <StyledInput
+            value={typeValue}
+            onChange={(e) => {
+              setTypeValue(e.target.value);
+            }}
+            type="text"
+            name="type"
+            placeholder="Human"
+          />
           <StyledLabel htmlFor="name">Gender</StyledLabel>
-          <StyledInput type="text" name="gender" placeholder="Male" />
+          <StyledInput
+            value={genderValue}
+            onChange={(e) => {
+              setGenderValue(e.target.value);
+            }}
+            type="text"
+            name="gender"
+            placeholder="Male"
+          />
         </FiltersSmallContainer>
       </FilterGroupsWrapper>
 
-      <ApplyFiltersButton type="button">Apply</ApplyFiltersButton>
+      <ApplyFiltersButton type="button" onClick={updateUrl}>
+        Apply
+      </ApplyFiltersButton>
     </FiltersContainer>
   );
 }
