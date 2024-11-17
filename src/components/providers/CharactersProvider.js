@@ -16,12 +16,12 @@ export function CharactersProvider({ children }) {
 
   const getInitSearchParamValue = (searchParamName) => {
     if (searchParamName === 'page') {
-      const pageFromURL = +initSearchParams.get(searchParamName);
+      const pageNumberFromURL = +initSearchParams.get(searchParamName);
 
-      if (isNaN(pageFromURL) || pageFromURL < 1) {
+      if (isNaN(pageNumberFromURL) || pageNumberFromURL < firstPageNumber) {
         return firstPageNumber;
       }
-      return pageFromURL ?? firstPageNumber;
+      return pageNumberFromURL;
     }
     return initSearchParams.get(searchParamName) ?? '';
   };
