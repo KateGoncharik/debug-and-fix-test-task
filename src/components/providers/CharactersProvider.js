@@ -55,16 +55,12 @@ export function CharactersProvider({ children }) {
       });
 
       searchParams.set('page', page.toString());
-
-      const newUrl = `${API_URL}?${searchParams.toString()}`;
       window.history.pushState({}, '', `?${searchParams.toString()}`);
-
-      setApiURL(newUrl);
     },
     [activePage]
   );
 
-  const fetchData = async (filters, page) => {
+  const fetchCharacters = useCallback(async (filters, page) => {
     setIsFetching(true);
     setIsError(false);
 
@@ -73,22 +69,23 @@ export function CharactersProvider({ children }) {
 
     axios
       .get(`${API_URL}?${searchParams.toString()}`)
-      .then(({ data }) => {
+
+      .then(({ data: characters }) => {
         setIsFetching(false);
-        setCharacters(data.results);
-        setInfo(data.info);
+        setCharacters(characters.results);
+        setInfo(characters.info);
       })
       .catch((e) => {
         setIsFetching(false);
         setIsError(true);
         console.error(e);
       });
-  };
+  }, []);
 
   useEffect(() => {
-    fetchData(filters, activePage);
+    fetchCharacters(filters, activePage);
     updateUrl(filters, activePage);
-  }, [filters, activePage, updateUrl]);
+  }, [filters, activePage, updateUrl, fetchCharacters]);
 
   const dataValue = useMemo(
     () => ({
