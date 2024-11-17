@@ -45,16 +45,12 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
   );
 
   useEffect(() => {
-    if (visible) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('click', handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
-  }, [visible, handleClickOutside]);
+  }, [handleClickOutside]);
 
   useEffect(() => {
     function handleEscapeKey(e) {

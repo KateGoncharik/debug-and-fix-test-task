@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { useRef } from 'react';
 
 export function FiltersMenu({
-  settings,
+  isVisible,
   setSettings,
   filters,
   setFilters,
@@ -16,8 +16,6 @@ export function FiltersMenu({
   const [speciesValue, setSpeciesValue] = useState(filters.species);
   const [typeValue, setTypeValue] = useState(filters.type);
   const [genderValue, setGenderValue] = useState(filters.gender);
-  // TODO make just a boolean, not object
-  const isVisible = settings.visible;
 
   function handleFiltersApply() {
     setFilters({
@@ -52,10 +50,7 @@ export function FiltersMenu({
   }
 
   function toggleFiltersMenu() {
-    setSettings((prevState) => ({
-      ...prevState,
-      visible: !prevState.visible
-    }));
+    setSettings((prevState) => !prevState);
   }
 
   const filtersMenuRef = useRef(null);
@@ -78,16 +73,12 @@ export function FiltersMenu({
   );
 
   useEffect(() => {
-    if (isVisible) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('click', handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
-  }, [isVisible, handleClickOutside]);
+  }, [handleClickOutside]);
 
   function handleKeyDown(e) {
     if (e.key === 'Enter') {

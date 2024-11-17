@@ -13,7 +13,8 @@ export function ItemsGrid() {
   const { characters } = useCharacters();
   const [popupSettings, setPopupSettings] = useState(defaultPopupSettings);
 
-  function cardOnClickHandler(props) {
+  function cardOnClickHandler(e, props) {
+    e.stopPropagation();
     setPopupSettings({
       visible: true,
       content: { ...props }
@@ -29,7 +30,7 @@ export function ItemsGrid() {
       {characters.map((characterProps) => (
         <Card
           key={characterProps.id}
-          onClickHandler={() => cardOnClickHandler(characterProps)}
+          onClickHandler={(e) => cardOnClickHandler(e, characterProps)}
           {...characterProps}
         />
       ))}

@@ -7,34 +7,27 @@ import { FiltersMenu } from './FiltersMenu';
 export function Filters() {
   const { filters, setFilters, resetActivePage } = useCharacters();
 
-  const defaultFiltersMenuSettings = {
-    visible: false
-  };
+  const defaultIsFiltersMenuVisible = false;
 
-  const [filtersMenuSettings, setFiltersMenuSettings] = useState(
-    defaultFiltersMenuSettings
+  const [isFiltersMenuVisible, setIsFiltersMenuVisible] = useState(
+    defaultIsFiltersMenuVisible
   );
 
-  function handleOpenFilters() {
-    setFiltersMenuSettings({
-      visible: true
-    });
+  function handleOpenFilters(e) {
+    e.stopPropagation();
+    setIsFiltersMenuVisible(true);
   }
 
   return (
     <FiltersWrapper>
       <FiltersContainer>
-        <ToggleButton
-          onClick={() => {
-            handleOpenFilters();
-          }}
-        >
-          {filtersMenuSettings.visible ? 'Hide Filters' : 'Show Filters'}
+        <ToggleButton onClick={handleOpenFilters}>
+          {isFiltersMenuVisible.visible ? 'Hide Filters' : 'Show Filters'}
         </ToggleButton>
 
         <FiltersMenu
-          settings={filtersMenuSettings}
-          setSettings={setFiltersMenuSettings}
+          isVisible={isFiltersMenuVisible}
+          setSettings={setIsFiltersMenuVisible}
           filters={filters}
           resetActivePage={resetActivePage}
           setFilters={setFilters}
