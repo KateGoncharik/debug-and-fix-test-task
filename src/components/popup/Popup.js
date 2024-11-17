@@ -130,7 +130,7 @@ const StyledPopup = styled.div`
     display: none;
   }
   @media (max-width: 1000px) {
-    width: 65%;
+    width: 60%;
   }
   @media (max-width: 768px) {
     width: 85%;
@@ -172,7 +172,7 @@ const CloseIcon = styled.div`
   }
 
   @media (max-width: 1000px) {
-    right: calc(18% - 10px);
+    right: calc(22% - 10px);
   }
 
   @media (max-width: 768px) {
