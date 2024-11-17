@@ -60,11 +60,18 @@ export function FiltersMenu({
 
   useEffect(() => {
     window.addEventListener('click', (e) => {
-      if (e.target.classList.contains('bAPiCi')) {
+      if (e.target.classList.contains('bjiXqP')) {
         cachedTogglePopup(e);
       }
     });
   }, [cachedTogglePopup]);
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter') {
+      handleFiltersApply();
+    }
+  }
+
   return (
     <FiltersMenuContainer visible={isVisible}>
       <StyledFiltersMenu>
@@ -80,7 +87,7 @@ export function FiltersMenu({
               id="name-filter-input"
               type="text"
               name="name"
-              onKeyDown={(e) => e.key === 'Enter' && handleFiltersApply()}
+              onKeyDown={handleKeyDown}
               placeholder="Rick"
             />
           </StyledInputContainer>
@@ -88,7 +95,7 @@ export function FiltersMenu({
             <StyledLabel htmlFor="status-filter-select">Status</StyledLabel>
             <StyledSelect
               onChange={(e) => setStatusValue(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleFiltersApply()}
+              onKeyDown={handleKeyDown}
               value={statusValue}
               id="status-filter-select"
               name="status"
@@ -103,7 +110,7 @@ export function FiltersMenu({
           <StyledInputContainer>
             <StyledLabel htmlFor="species-filter-input">Species</StyledLabel>
             <StyledInput
-              onKeyDown={(e) => e.key === 'Enter' && handleFiltersApply()}
+              onKeyDown={handleKeyDown}
               value={speciesValue}
               onChange={(e) => {
                 setSpeciesValue(e.target.value);
@@ -118,7 +125,7 @@ export function FiltersMenu({
           <StyledInputContainer>
             <StyledLabel htmlFor="type-filter-input">Type</StyledLabel>
             <StyledInput
-              onKeyDown={(e) => e.key === 'Enter' && handleFiltersApply()}
+              onKeyDown={handleKeyDown}
               value={typeValue}
               onChange={(e) => {
                 setTypeValue(e.target.value);
@@ -134,7 +141,7 @@ export function FiltersMenu({
             <StyledLabel htmlFor="gender-filter-select">Gender</StyledLabel>
             <StyledSelect
               onChange={(e) => setGenderValue(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleFiltersApply()}
+              onKeyDown={handleKeyDown}
               value={genderValue}
               id="gender-filter-select"
               name="gender"
