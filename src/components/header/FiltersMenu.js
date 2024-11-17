@@ -85,19 +85,21 @@ export function FiltersMenu({
             />
           </StyledInputContainer>
           <StyledInputContainer>
-            <StyledLabel htmlFor="status-filter-input">Status</StyledLabel>
-            <StyledInput
+            <StyledLabel htmlFor="status-filter-select">Status</StyledLabel>
+            <StyledSelect
+              onChange={(e) => setStatusValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleFiltersApply()}
               value={statusValue}
-              onChange={(e) => {
-                setStatusValue(e.target.value);
-              }}
-              id="status-filter-input"
-              type="text"
+              id="status-filter-select"
               name="status"
-              placeholder="Alive"
-            />
+            >
+              <option value="">All</option>
+              <option value="Alive">Alive</option>
+              <option value="Dead">Dead</option>
+              <option value="Unknown">Unknown</option>
+            </StyledSelect>
           </StyledInputContainer>
+          {/* we cannot use select here, as api does not provide enum for species */}
           <StyledInputContainer>
             <StyledLabel htmlFor="species-filter-input">Species</StyledLabel>
             <StyledInput
@@ -108,10 +110,11 @@ export function FiltersMenu({
               }}
               id="species-filter-input"
               type="text"
-              name="type"
+              name="species"
               placeholder="Human"
             />
           </StyledInputContainer>
+          {/* we cannot use select here, as api does not provide enum for type */}
           <StyledInputContainer>
             <StyledLabel htmlFor="type-filter-input">Type</StyledLabel>
             <StyledInput
@@ -123,22 +126,25 @@ export function FiltersMenu({
               id="type-filter-input"
               type="text"
               name="type"
-              placeholder="Superhuman"
+              placeholder="Clone"
             />
           </StyledInputContainer>
+
           <StyledInputContainer>
-            <StyledLabel htmlFor="gender-filter-input">Gender</StyledLabel>
-            <StyledInput
+            <StyledLabel htmlFor="gender-filter-select">Gender</StyledLabel>
+            <StyledSelect
+              onChange={(e) => setGenderValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleFiltersApply()}
               value={genderValue}
-              onChange={(e) => {
-                setGenderValue(e.target.value);
-              }}
-              id="gender-filter-input"
-              type="text"
+              id="gender-filter-select"
               name="gender"
-              placeholder="Male"
-            />
+            >
+              <option value="">All</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Genderless">Genderless</option>
+              <option value="Unknown">Unknown</option>
+            </StyledSelect>
           </StyledInputContainer>
         </FilterGroupsWrapper>
         <FilterButtonsContainer>
@@ -296,6 +302,27 @@ const StyledInput = styled.input`
   }
 `;
 
+const StyledSelect = styled.select`
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #333;
+  background-color: white;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #d8f251;
+    box-shadow: 0 0 5px #d8f251;
+  }
+
+  option {
+    color: #333;
+    background-color: white;
+  }
+`;
 const FilterGroupsWrapper = styled.div`
   display: flex;
   gap: 5px;
