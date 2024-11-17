@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import { useEffect, useState } from 'react';
 import { useCallback } from 'react';
+import { useRef } from 'react';
 
 export function FiltersMenu({
   settings,
@@ -15,6 +16,7 @@ export function FiltersMenu({
   const [speciesValue, setSpeciesValue] = useState(filters.species);
   const [typeValue, setTypeValue] = useState(filters.type);
   const [genderValue, setGenderValue] = useState(filters.gender);
+  // TODO make just a boolean, not object
   const isVisible = settings.visible;
 
   function handleFiltersApply() {
@@ -26,7 +28,7 @@ export function FiltersMenu({
       gender: genderValue
     });
     resetActivePage();
-    togglePopup();
+    toggleFiltersMenu();
   }
 
   const emptyFilterValue = '';
@@ -46,25 +48,46 @@ export function FiltersMenu({
     setTypeValue(emptyFilterValue);
 
     resetActivePage();
-    togglePopup();
+    toggleFiltersMenu();
   }
 
-  function togglePopup() {
+  function toggleFiltersMenu() {
     setSettings((prevState) => ({
       ...prevState,
       visible: !prevState.visible
     }));
   }
+
+  const filtersMenuRef = useRef(null);
   document.body.style = isVisible ? 'overflow: hidden;' : 'overflow: auto;';
-  const cachedTogglePopup = useCallback(togglePopup, [setSettings]);
+  const cachedToggleFiltersMenu = useCallback(toggleFiltersMenu, [setSettings]);
+
+  const handleClickOutside = useCallback(
+    (e) => {
+      if (
+        !isVisible ||
+        !filtersMenuRef.current ||
+        filtersMenuRef.current.contains(e.target)
+      ) {
+        return;
+      }
+
+      cachedToggleFiltersMenu();
+    },
+    [isVisible, cachedToggleFiltersMenu]
+  );
 
   useEffect(() => {
-    window.addEventListener('click', (e) => {
-      if (e.target.classList.contains('bjiXqP')) {
-        cachedTogglePopup(e);
-      }
-    });
-  }, [cachedTogglePopup]);
+    if (isVisible) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isVisible, handleClickOutside]);
 
   function handleKeyDown(e) {
     if (e.key === 'Enter') {
@@ -74,8 +97,8 @@ export function FiltersMenu({
 
   return (
     <FiltersMenuContainer visible={isVisible}>
-      <StyledFiltersMenu>
-        <CloseIcon onClick={togglePopup} />
+      <StyledFiltersMenu ref={filtersMenuRef}>
+        <CloseIcon onClick={toggleFiltersMenu} />
         <FilterGroupsWrapper>
           <StyledInputContainer>
             <StyledLabel htmlFor="name-filter-input">Name</StyledLabel>

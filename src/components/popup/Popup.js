@@ -31,13 +31,15 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
 
   const handleClickOutside = useCallback(
     (e) => {
-      if (!visible || popupRef.current.contains(e.target)) {
+      if (
+        !visible ||
+        !popupRef.current ||
+        popupRef.current.contains(e.target)
+      ) {
         return;
       }
 
-      if (popupRef.current && !popupRef.current.contains(e.target)) {
-        cachedTogglePopup();
-      }
+      cachedTogglePopup();
     },
     [visible, cachedTogglePopup]
   );
