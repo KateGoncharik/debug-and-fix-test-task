@@ -17,7 +17,8 @@ export function CharactersProvider({ children }) {
   const getInitSearchParamValue = (searchParamName) => {
     if (searchParamName === 'page') {
       const pageFromURL = +initSearchParams.get(searchParamName);
-      if (pageFromURL < 1) {
+
+      if (isNaN(pageFromURL) || pageFromURL < 1) {
         return firstPageNumber;
       }
       return pageFromURL ?? firstPageNumber;
