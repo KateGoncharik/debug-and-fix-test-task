@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { PopupEpisodes } from './PopupEpisodes';
 import { PopupHeader } from './PopupHeader';
 import { PopupInfo } from './PopupInfo';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useCallback } from 'react';
 
 export function Popup({ settings: { visible, content = {} }, setSettings }) {
@@ -18,6 +18,8 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
     episode: episodes
   } = content;
 
+  const popupRef = useRef(null);
+
   function togglePopup() {
     setSettings((prevState) => ({
       ...prevState,
@@ -27,23 +29,37 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
   document.body.style = visible ? 'overflow: hidden;' : 'overflow: auto;';
   const cachedTogglePopup = useCallback(togglePopup, [setSettings]);
 
-  useEffect(() => {
-    window.addEventListener('click', (e) => {
-      if (e.target.classList.contains('dnLlJK')) {
-        cachedTogglePopup(e);
+  const handleClickOutside = useCallback(
+    (e) => {
+      if (!visible || popupRef.current.contains(e.target)) {
+        return;
       }
-    });
-  }, [cachedTogglePopup]);
+
+      if (popupRef.current && !popupRef.current.contains(e.target)) {
+        cachedTogglePopup();
+      }
+    },
+    [visible, cachedTogglePopup]
+  );
+
+  useEffect(() => {
+    if (visible) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [visible, handleClickOutside]);
 
   useEffect(() => {
     function handleEscapeKey(e) {
-      if (e.key !== 'Escape') {
+      if (e.key !== 'Escape' || visible === false) {
         return;
       }
-      const isPopupOpened = visible === true;
-      if (!isPopupOpened) {
-        return;
-      }
+
       cachedTogglePopup();
     }
 
@@ -55,7 +71,7 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
 
   return (
     <PopupContainer visible={visible}>
-      <StyledPopup>
+      <StyledPopup ref={popupRef}>
         <CloseIcon onClick={togglePopup} />
 
         <PopupHeader
