@@ -7,6 +7,7 @@ import {
   useMemo,
   useState
 } from 'react';
+import { firstPageNumber } from '../Pagination';
 
 const API_URL = 'https://rickandmortyapi.com/api/character/';
 
@@ -14,13 +15,17 @@ export function CharactersProvider({ children }) {
   const initSearchParams = new URLSearchParams(document.location.search);
 
   const getInitSearchParamValue = (searchParamName) => {
+    if (searchParamName === 'page') {
+      const pageFromURL = +initSearchParams.get(searchParamName);
+      if (pageFromURL < 1) {
+        return firstPageNumber;
+      }
+      return pageFromURL ?? firstPageNumber;
+    }
     return initSearchParams.get(searchParamName) ?? '';
   };
   const initPage = getInitSearchParamValue('page');
-  const firstPageIndex = 0;
-  const [activePage, setActivePage] = useState(
-    initPage === '' ? firstPageIndex : initPage
-  );
+  const [activePage, setActivePage] = useState(initPage);
   const [characters, setCharacters] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -36,7 +41,7 @@ export function CharactersProvider({ children }) {
   });
 
   const resetActivePage = () => {
-    setActivePage(firstPageIndex);
+    setActivePage(firstPageNumber);
   };
 
   const updateUrl = useCallback(
