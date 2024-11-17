@@ -18,7 +18,7 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
     episode: episodes
   } = content;
 
-  function togglePopup(e) {
+  function togglePopup() {
     setSettings((prevState) => ({
       ...prevState,
       visible: !prevState.visible
@@ -34,6 +34,25 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
       }
     });
   }, [cachedTogglePopup]);
+
+  useEffect(() => {
+    function handleEscapeKey(e) {
+      if (e.key !== 'Escape') {
+        return;
+      }
+      const isPopupOpened = visible === true;
+      if (!isPopupOpened) {
+        return;
+      }
+      cachedTogglePopup();
+    }
+
+    window.addEventListener('keydown', handleEscapeKey);
+    return () => {
+      window.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [cachedTogglePopup, visible]);
+
   return (
     <PopupContainer visible={visible}>
       <StyledPopup>
