@@ -6,7 +6,7 @@ import { useRef } from 'react';
 
 export function FiltersMenu({
   isVisible,
-  setSettings,
+  setSettings: setIsVisible,
   filters,
   setFilters,
   resetActivePage
@@ -50,12 +50,14 @@ export function FiltersMenu({
   }
 
   function toggleFiltersMenu() {
-    setSettings((prevState) => !prevState);
+    setIsVisible((prevState) => !prevState);
   }
 
   const filtersMenuRef = useRef(null);
   document.body.style = isVisible ? 'overflow: hidden;' : 'overflow: auto;';
-  const cachedToggleFiltersMenu = useCallback(toggleFiltersMenu, [setSettings]);
+  const cachedToggleFiltersMenu = useCallback(toggleFiltersMenu, [
+    setIsVisible
+  ]);
 
   const handleClickOutside = useCallback(
     (e) => {
@@ -85,6 +87,17 @@ export function FiltersMenu({
       handleFiltersApply();
     }
   }
+
+  useEffect(() => {
+    const closeMenuOnBrowserNavigation = () => {
+      setIsVisible(false);
+    };
+
+    window.addEventListener('popstate', closeMenuOnBrowserNavigation);
+
+    return () =>
+      window.removeEventListener('popstate', closeMenuOnBrowserNavigation);
+  }, [cachedToggleFiltersMenu, setIsVisible]);
 
   return (
     <FiltersMenuContainer visible={isVisible}>
