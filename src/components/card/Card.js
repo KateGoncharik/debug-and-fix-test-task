@@ -45,5 +45,6 @@ const StyledCard = styled.div`
 `;
 
 const CardImg = styled.img`
+  user-select: none;
   border-radius: 10px 10px 0 0;
 `;

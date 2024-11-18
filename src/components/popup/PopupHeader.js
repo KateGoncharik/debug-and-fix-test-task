@@ -38,4 +38,5 @@ const PopupImage = styled.img`
   height: 100%;
   max-width: 350px;
   max-height: 350px;
+  user-select: none;
 `;
